@@ -154,7 +154,40 @@ def sanitize_display_name(name: str) -> str:
     name = re.sub(r"\s+", " ", name)
     name = name[:24]
     return name or "User"
+@app.get("/api/dm")
+@login_required
+def api_dm():
+    user = current_user()
+    me = user["id"]
 
+    peer = int(request.args.get("to", "0"))
+    after = int(request.args.get("after", "0"))
+
+    conn = db()
+
+    rows = conn.execute("""
+        SELECT id, sender_id, receiver_id, text, created_at
+        FROM messages
+        WHERE id > ?
+        AND (
+            (sender_id=? AND receiver_id=?)
+            OR
+            (sender_id=? AND receiver_id=?)
+        )
+        ORDER BY id ASC
+    """, (after, me, peer, peer, me)).fetchall()
+
+    conn.close()
+
+    return jsonify([
+        {
+            "id": r["id"],
+            "sender_id": r["sender_id"],
+            "text": r["text"],
+            "created_at": r["created_at"]
+        }
+        for r in rows
+    ])
 # ---------------- auth ----------------
 @app.get("/register")
 def register_page():
@@ -457,13 +490,48 @@ def dm():
         <textarea name="text" rows="3" maxlength="2000" placeholder="Напиши сообщение..." required></textarea>
         <div style="margin-top:10px;">
           <button type="submit">Отправить</button>
-          <span class="muted" style="margin-left:10px;">обновляй страницу, чтобы видеть новые (MVP)</span>
         </div>
       </form>
     </div>
-    {''.join(bubbles) if bubbles else '<div class="card muted">Сообщений пока нет.</div>'}
-    """
-    return page("Личные сообщения", body, user=user)
+    <div id="chat-box">
+{''.join(bubbles) if bubbles else '<div class="card muted">Сообщений пока нет.</div>'}
+</div>
+    <script>
+const params = new URLSearchParams(window.location.search);
+const peerId = params.get("to");
+
+let lastId = 0;
+
+async function checkMessages() {
+  try {
+    const res = await fetch(`/api/dm?to=${peerId}&after=${lastId}`);
+    const data = await res.json();
+
+    if (data.length > 0) {
+      const box = document.getElementById("chat-box");
+
+      data.forEach(msg => {
+        lastId = Math.max(lastId, msg.id);
+
+        const div = document.createElement("div");
+        div.className = "card";
+        div.textContent = msg.text;
+
+        box.appendChild(div);
+      });
+
+      box.scrollTop = box.scrollHeight;
+    }
+
+  } catch(e) {}
+
+  setTimeout(checkMessages, 1200);
+}
+
+checkMessages();
+</script>
+"""
+return page("Личные сообщения", body, user=user)
 
 @app.post("/dm/send")
 @login_required
@@ -543,6 +611,7 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
