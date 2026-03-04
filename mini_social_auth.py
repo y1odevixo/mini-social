@@ -5,7 +5,7 @@
 #   python mini_social_auth.py
 # Открой: http://127.0.0.1:5000
 
-from flask import Flask, request, redirect, session, abort
+from flask import Flask, request, redirect, session, abort, jsonify
 import sqlite3
 import time
 import re
@@ -543,6 +543,7 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
