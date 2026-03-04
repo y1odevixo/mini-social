@@ -528,9 +528,9 @@ async function checkMessages() {{
     setTimeout(checkMessages, 1200);
 }}
 checkMessages();
-</script>
-"""
-return page("Личные сообщения", body, user=user)
+    </script>
+    """
+    return page("Личные сообщения", body, user=user)
 
 @app.post("/dm/send")
 @login_required
@@ -610,6 +610,7 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
