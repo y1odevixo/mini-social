@@ -493,7 +493,7 @@ def dm_send():
     conn.close()
     return redirect(f"/dm?to={other_id}")
 
-@APP.get("/inbox")
+@app.get("/inbox")
 @login_required
 def inbox():
     user = current_user()
@@ -543,5 +543,6 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
