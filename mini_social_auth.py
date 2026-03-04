@@ -156,7 +156,7 @@ def sanitize_display_name(name: str) -> str:
     return name or "User"
 
 # ---------------- auth ----------------
-@APP.get("/register")
+@app.get("/register")
 def register_page():
     body = """
     <div class="card">
@@ -177,7 +177,7 @@ def register_page():
     """
     return page("Регистрация", body, user=None)
 
-@APP.post("/register")
+@app.post("/register")
 def register():
     email = (request.form.get("email") or "").strip().lower()
     password = request.form.get("password") or ""
@@ -206,7 +206,7 @@ def register():
     session["user_id"] = user_id
     return redirect("/")
 
-@APP.get("/login")
+@app.get("/login")
 def login_page():
     body = """
     <div class="card">
@@ -224,7 +224,7 @@ def login_page():
     """
     return page("Вход", body, user=None)
 
-@APP.post("/login")
+@app.post("/login")
 def login():
     email = (request.form.get("email") or "").strip().lower()
     password = request.form.get("password") or ""
@@ -239,13 +239,13 @@ def login():
     session["user_id"] = u["id"]
     return redirect("/")
 
-@APP.get("/logout")
+@app.get("/logout")
 def logout():
     session.clear()
     return redirect("/login")
 
 # ---------------- main features ----------------
-@APP.get("/")
+@app.get("/")
 @login_required
 def feed():
     user = current_user()
@@ -287,7 +287,7 @@ def feed():
     """
     return page("Лента", body, user=user)
 
-@APP.post("/post")
+@app.post("/post")
 @login_required
 def add_post():
     user = current_user()
@@ -303,7 +303,7 @@ def add_post():
     conn.close()
     return redirect("/")
 
-@APP.get("/people")
+@app.get("/people")
 @login_required
 def people():
     user = current_user()
@@ -337,7 +337,7 @@ def people():
     """
     return page("Люди", body, user=user)
 
-@APP.get("/profile")
+@app.get("/profile")
 @login_required
 def profile():
     user = current_user()
@@ -370,7 +370,7 @@ def profile():
     """
     return page("Профиль", body, user=user)
 
-@APP.post("/profile")
+@app.post("/profile")
 @login_required
 def profile_save():
     user = current_user()
@@ -384,7 +384,7 @@ def profile_save():
     conn.close()
     return redirect("/profile")
 
-@APP.post("/profile/password")
+@app.post("/profile/password")
 @login_required
 def profile_password():
     user = current_user()
@@ -406,7 +406,7 @@ def profile_password():
     conn.close()
     return redirect("/profile")
 
-@APP.get("/dm")
+@app.get("/dm")
 @login_required
 def dm():
     user = current_user()
@@ -465,7 +465,7 @@ def dm():
     """
     return page("Личные сообщения", body, user=user)
 
-@APP.post("/dm/send")
+@app.post("/dm/send")
 @login_required
 def dm_send():
     user = current_user()
@@ -543,6 +543,7 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
