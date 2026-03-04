@@ -498,34 +498,35 @@ def dm():
 </div>
     <script>
 <script>
+<script>
 const params = new URLSearchParams(window.location.search);
 const peerId = params.get("to");
 
 let lastId = 0;
 
-async function checkMessages() {
-  try {
+async function checkMessages() {{
+  try {{
     const res = await fetch("/api/dm?to=" + peerId + "&after=" + lastId);
     const data = await res.json();
 
-    if (data.length > 0) {
+    if (data.length > 0) {{
       const box = document.getElementById("chat-box");
 
-      data.forEach(msg => {
+      data.forEach(msg => {{
         lastId = Math.max(lastId, msg.id);
 
         const div = document.createElement("div");
         div.className = "card";
         div.textContent = msg.text;
         box.appendChild(div);
-      });
+      }});
 
       box.scrollTop = box.scrollHeight;
-    }
-  } catch (e) {}
+    }}
+  }} catch (e) {{}}
 
   setTimeout(checkMessages, 1200);
-}
+}}
 
 checkMessages();
 </script>
@@ -610,6 +611,7 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
