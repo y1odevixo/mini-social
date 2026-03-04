@@ -518,10 +518,10 @@ async function checkMessages() {{
         div.textContent = msg.text;
 
         box.appendChild(div);
-      });
+      }};
 
       box.scrollTop = box.scrollHeight;
-    }
+    }}
 
   } catch(e) {}
 
@@ -611,6 +611,7 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
