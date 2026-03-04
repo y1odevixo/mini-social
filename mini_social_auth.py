@@ -15,8 +15,8 @@ from html import escape
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 
-APP = Flask(__name__)
-APP.secret_key = os.environ.get("SECRET_KEY", "CHANGE_ME_TO_SOMETHING_RANDOM")  # поменяй для продакшена
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "CHANGE_ME_TO_SOMETHING_RANDOM")  # поменяй для продакшена
 DB_PATH = Path("mini_social_auth.db")
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -543,3 +543,4 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     APP.run(host="0.0.0.0", port=5000, debug=True)
+
