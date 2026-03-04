@@ -504,30 +504,30 @@ let lastId = 0;
 
 async function checkMessages() {{
     try {{
-    const res = await fetch("/api/dm?to=" + peerId + "&after=" + lastId);
-    const data = await res.json();
+        const res = await fetch("/api/dm?to=" + peerId + "&after=" + lastId);
+        const data = await res.json();
 
-    if (data.length > 0) {{
-      const box = document.getElementById("chat-box");
+        if (data.length > 0) {{
+            const box = document.getElementById("chat-box");
 
-      data.forEach(msg => {{
-        lastId = Math.max(lastId, msg.id);
+            data.forEach(msg => {{
+                lastId = Math.max(lastId, msg.id);
 
-        const div = document.createElement("div");
-        div.className = "card";
-        div.textContent = msg.text;
+                const div = document.createElement("div");
+                div.className = "card";
+                div.textContent = msg.text;
 
-        box.appendChild(div);
-      }};
+                box.appendChild(div);
+            }});
 
-      box.scrollTop = box.scrollHeight;
-    }}
+            box.scrollTop = box.scrollHeight;
+        }}
 
-  }} catch(e) {}
-
-  setTimeout(checkMessages, 1200);
+    }} catch(e) {{
 }}
 
+    setTimeout(checkMessages, 1200);
+}}
 checkMessages();
 </script>
 """
@@ -611,6 +611,7 @@ if __name__ == "__main__":
     # Для общения с друзьями в одной сети можно поставить host="0.0.0.0"
     # и открыть порт 5000 на роутере/фаерволе.
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 
